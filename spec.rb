@@ -42,5 +42,24 @@ context 'nest.json' do
   assert(res['address'], 'tokyo')
 end
 
+context 'nest.json' do
+  file = File.open('json/nest_in_nest.json')
+  res = Parser.new(file).exec
+
+  assert(res.key?('person'), true)
+  assert(res['person'].key?('name'), true)
+  assert(res['person']['name'], 'John')
+  assert(res['person'].key?('age'), true)
+  assert(res['person']['age'], 30)
+  assert(res['person'].key?('car'), true)
+  assert(res['person']['car'].key?('maker'), true)
+  assert(res['person']['car']['maker'], 'toyota')
+  assert(res['person']['car'].key?('price'), true)
+  assert(res['person']['car']['price'], 50000000)
+
+  assert(res.key?('address'), true)
+  assert(res['address'], 'tokyo')
+end
+
 puts "ok"
 
