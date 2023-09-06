@@ -5,14 +5,11 @@ class Parser
 
   def exec
     char = @file.getc
-    until /^[a-zA-Z0-9\p{P}]$/.match?(char)
+    until char.start_with?('{')
       char = @file.getc
-      next
     end
 
-    if char.start_with?('{')
-      p_key_value(@file)
-    end
+    p_key_value(@file)
   end
 
   def p_key_value(file)
@@ -21,7 +18,6 @@ class Parser
     until file.eof?
       key = p_key(file)
       value, char, s = p_value(file)
-      puts "value: #{value}"
       hash[key] = value
     end
 
@@ -32,7 +28,7 @@ class Parser
     char = file.getc
     until char.start_with?('"')
       char = file.getc
-      next
+      # next
     end
 
     key = ''
@@ -50,7 +46,7 @@ class Parser
     char = file.getc
     until /^[a-zA-Z0-9\p{P}]$/.match?(char)
       char = file.getc
-      next
+      # next
     end
 
     value = char
