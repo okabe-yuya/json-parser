@@ -21,6 +21,7 @@ class Parser
     until file.eof?
       key = p_key(file)
       value, char, s = p_value(file)
+      puts "value: #{value}"
       hash[key] = value
     end
 
@@ -80,8 +81,10 @@ class Parser
 
     until end_value
       key = p_key(file)
-      value, _, end_value = p_value(file)
+      value, char, end_value = p_value(file)
       hash[key] = value
+
+      break unless /^[a-zA-Z0-9\p{P}]$/.match?(char)
     end
 
     hash
