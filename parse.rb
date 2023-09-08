@@ -28,7 +28,7 @@ class Parser
     char = file.getc
     until char.start_with?('"')
       char = file.getc
-      # next
+      break if char.nil?
     end
 
     key = ''

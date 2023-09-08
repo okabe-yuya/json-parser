@@ -1,64 +1,22 @@
-require_relative 'parse'
+require_relative 'parser_v2'
+require 'json'
 
 def assert(result, expect)
   if result == expect
-    puts "passed(expect=#{expect}, got=#{result})"
+    puts "passed!"
   else
     raise "#expect: #{expect}, but got #{result}"
   end
 end
 
-def context(label, &)
-  puts ":::context: #{label}"
-  yield
-end
+Dir.glob('json/*') do |file_path|
+  puts ":::file path: #{file_path}"
 
+  file = File.open(file_path)
+  expect = JSON.parse(File.read(file_path))
+  res = ParserV2.new(file).exec
 
-context 'minimum.json' do
-  file = File.open('json/minimum.json')
-  res = Parser.new(file).exec
-
-  assert(res.key?('name'), true)
-  assert(res['name'], 'John')
-  assert(res.key?('age'), true)
-  assert(res['age'], 30)
-  assert(res.key?('car'), true)
-  assert(res['car'], nil)
-end
-
-context 'nest.json' do
-  file = File.open('json/nest.json')
-  res = Parser.new(file).exec
-
-  assert(res.key?('person'), true)
-  assert(res['person'].key?('name'), true)
-  assert(res['person']['name'], 'John')
-  assert(res['person'].key?('age'), true)
-  assert(res['person']['age'], 30)
-  assert(res['person'].key?('car'), true)
-  assert(res['person']['car'], nil)
-
-  assert(res.key?('address'), true)
-  assert(res['address'], 'tokyo')
-end
-
-context 'nest.json' do
-  file = File.open('json/nest_in_nest.json')
-  res = Parser.new(file).exec
-
-  assert(res.key?('person'), true)
-  assert(res['person'].key?('name'), true)
-  assert(res['person']['name'], 'John')
-  assert(res['person'].key?('age'), true)
-  assert(res['person']['age'], 30)
-  assert(res['person'].key?('car'), true)
-  assert(res['person']['car'].key?('maker'), true)
-  assert(res['person']['car']['maker'], 'toyota')
-  assert(res['person']['car'].key?('price'), true)
-  assert(res['person']['car']['price'], 50000000)
-
-  assert(res.key?('address'), true)
-  assert(res['address'], 'tokyo')
+  assert(res, expect)
 end
 
 puts "ok"
