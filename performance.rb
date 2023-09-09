@@ -7,16 +7,15 @@ require_relative 'parser_v2'
 file_path = 'json/nest_in_nest.json'
 
 Benchmark.bm do |x|
-  x.report('My JSON parser') do
-    file = File.open('json/nest_in_nest.json')
-    Parser.new(file).exec
-  end
-  x.report('My JSON parser V2') do
-    file = File.open('json/nest_in_nest.json')
-    ParserV2.new(file).exec
-  end
-  x.report('Default JSON parser') do
-    file = File.read('json/nest_in_nest.json')
-    JSON.parse(file)
+  Dir.glob('json/*') do |file_path|
+    x.report("Default JSON parse(#{file_path})") do
+      file = File.read(file_path)
+      JSON.parse(file)
+    end
+    x.report("My JSON parser V2(#{file_path})") do
+      file = File.open('json/nest_in_nest.json')
+      ParserV2.new(file).exec
+    end
+    puts "---------"
   end
 end

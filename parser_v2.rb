@@ -149,3 +149,9 @@ class ParserV2
     [nil, last]
   end
 end
+
+if __FILE__ == $0
+  file = File.open('json/minimum.json')
+  res = ParserV2.new(file).exec
+  puts ":::parsed result: #{res}"
+end
